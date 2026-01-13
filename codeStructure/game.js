@@ -20,7 +20,8 @@ export default class Game {
     async init() {
         // alert("GAME LOADED");
         PIXI.Assets.addBundle('level-1', {
-            bunny: "https://pixijs.com/assets/bunny.png"
+            bunny: "https://pixijs.com/assets/bunny.png",
+            fighter: "https://pixijs.com/assets/spritesheet/fighter.json"
         })
 
         const assets = await PIXI.Assets.loadBundle('level-1');
@@ -37,6 +38,8 @@ export default class Game {
         this.ui = new UI();
         this.app.stage.addChild(this.ui);
 
+        this.createFighter(assets.fighter);
+
         this.bunny.on("pointerdown", () => {
             this.ui.addScore();
         })
@@ -46,5 +49,29 @@ export default class Game {
 
     update(delta) {
         this.bunny.rotation += 0.1 * delta;
+    }
+
+    createFighter(sheet) {
+        const textures = [];
+        for (let i = 0; i < 30; i++) {
+            const val = i < 10 ? `000${i}` : `00${i}`;
+            const frameName = `rollSequence${val}.png`;
+            console.log(frameName);
+            const texture = sheet.textures[frameName];
+            textures.push(texture);
+        }
+
+        this.fighter = new PIXI.AnimatedSprite(textures);
+        this.fighter.x = this.app.screen.width / 2;
+        this.fighter.y = this.app.screen.height / 2;
+        this.fighter.eventMode = "static";
+        this.fighter.cursor = "pointer";
+        this.app.stage.addChild(this.fighter);
+        this.fighter.animationSpeed = 0.5;
+        this.fighter.play();
+        this.fighter.on("pointerdown", () => {
+            this.fighter.stop();
+        })
+
     }
 }
