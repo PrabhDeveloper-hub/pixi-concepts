@@ -21,11 +21,12 @@ export default class Game {
         // alert("GAME LOADED");
         PIXI.Assets.addBundle('level-1', {
             bunny: "https://pixijs.com/assets/bunny.png",
-            fighter: "https://pixijs.com/assets/spritesheet/fighter.json"
+            fighter: "https://pixijs.com/assets/spritesheet/fighter.json",
+            sky: "assets/space.jpg"
         })
 
         const assets = await PIXI.Assets.loadBundle('level-1');
-
+        this.createBackground(assets.sky);
         this.bunny = new PIXI.Sprite(assets.bunny);
         this.bunny.x = this.app.screen.width / 2;
         this.bunny.y = this.app.screen.height / 2.5;
@@ -33,11 +34,10 @@ export default class Game {
         this.bunny.anchor.set(0.5);
         this.bunny.eventMode = "static";
         this.bunny.cursor = "pointer";
-        this.app.stage.addChild(this.bunny);
+        // this.app.stage.addChild(this.bunny);
 
-        this.ui = new UI();
-        this.app.stage.addChild(this.ui);
-
+        // this.ui = new UI();
+        // this.app.stage.addChild(this.ui);
         this.createFighter(assets.fighter);
 
         this.bunny.on("pointerdown", () => {
@@ -49,6 +49,7 @@ export default class Game {
 
     update(delta) {
         this.bunny.rotation += 0.1 * delta;
+        this.bg.tilePosition.y += 10 * delta;
     }
 
     createFighter(sheet) {
@@ -64,14 +65,16 @@ export default class Game {
         this.fighter = new PIXI.AnimatedSprite(textures);
         this.fighter.x = this.app.screen.width / 2;
         this.fighter.y = this.app.screen.height / 2;
+        this.fighter.anchor.set(0.5);
         this.fighter.eventMode = "static";
         this.fighter.cursor = "pointer";
         this.app.stage.addChild(this.fighter);
         this.fighter.animationSpeed = 0.5;
         this.fighter.play();
-        this.fighter.on("pointerdown", () => {
-            this.fighter.stop();
-        })
+    }
 
+    createBackground(texture) {
+        this.bg = new PIXI.TilingSprite(texture, this.app.screen.width, this.app.screen.height);
+        this.app.stage.addChild(this.bg);
     }
 }
