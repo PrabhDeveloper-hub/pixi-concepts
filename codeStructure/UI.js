@@ -1,31 +1,28 @@
 import * as PIXI from "./pixi.js";
 
 export class UI extends PIXI.Container {
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    this.score = 0;
+        this.score = 0;
 
-    this.createScoreText();
-  }
+        this.createScoreText();
+    }
 
-  createScoreText() {
-    const style = new PIXI.TextStyle({
-      fontFamily: "Arial",
-      fontSize: 36,
-      fill: "white",
-      stroke: "black",
-      strokeThickness: 4
-    });
+    createScoreText() {
 
-    this.scoreText = new PIXI.Text("Score: 0", style);
-    this.scoreText.x = 20;
-    this.scoreText.y = 20;
-    this.addChild(this.scoreText);
-  }
+        this.scoreText = new PIXI.BitmapText("SCORE: 0", {
+            fontName: "Desyrel",
+            fontSize: 55,
+            align: "left"
+        })
+        this.scoreText.x = 20;
+        this.scoreText.y = 20;
+        this.addChild(this.scoreText);
+    }
 
-  addScore() {
-    this.score++;
-    this.scoreText.text = "Score: " + this.score;
-  }
+    addScore() {
+        this.score++;
+        this.scoreText.text = "SCORE: " + this.score;
+    }
 }

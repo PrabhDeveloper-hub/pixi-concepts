@@ -22,22 +22,23 @@ export default class Game {
         PIXI.Assets.addBundle('level-1', {
             bunny: "https://pixijs.com/assets/bunny.png",
             fighter: "https://pixijs.com/assets/spritesheet/fighter.json",
-            sky: "assets/space.jpg"
+            sky: "assets/space.jpg",
+            desyrel: "https://pixijs.com/assets/bitmap-font/desyrel.xml"
         })
 
         const assets = await PIXI.Assets.loadBundle('level-1');
         this.createBackground(assets.sky);
         this.bunny = new PIXI.Sprite(assets.bunny);
         this.bunny.x = this.app.screen.width / 2;
-        this.bunny.y = this.app.screen.height / 2.5;
+        this.bunny.y = this.app.screen.height / 5;
         this.bunny.scale.set(2.5);
         this.bunny.anchor.set(0.5);
         this.bunny.eventMode = "static";
         this.bunny.cursor = "pointer";
-        // this.app.stage.addChild(this.bunny);
+        this.app.stage.addChild(this.bunny);
 
-        // this.ui = new UI();
-        // this.app.stage.addChild(this.ui);
+        this.ui = new UI();
+        this.app.stage.addChild(this.ui);
         this.createFighter(assets.fighter);
 
         this.bunny.on("pointerdown", () => {
