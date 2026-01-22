@@ -13,8 +13,18 @@ export default class Game {
         })
 
         document.body.appendChild(this.app.view);
-
+        this.keys = {};
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyup.bind(this));
         this.init();
+    }
+
+    onKeyDown(e) {
+        this.keys[e.code] = true;
+    }
+
+    onKeyup(e) {
+        this.keys[e.code] = false;
     }
 
     async init() {
@@ -35,7 +45,7 @@ export default class Game {
         this.bunny.anchor.set(0.5);
         this.bunny.eventMode = "static";
         this.bunny.cursor = "pointer";
-        this.app.stage.addChild(this.bunny);
+        // this.app.stage.addChild(this.bunny);
 
         this.ui = new UI();
         this.app.stage.addChild(this.ui);
@@ -49,13 +59,34 @@ export default class Game {
     }
 
     update(delta) {
-        this.bunny.rotation += 0.1 * delta;
-        this.bg.tilePosition.y += 10 * delta;
+        // this.bunny.rotation += 0.1 * delta;
+        this.bg.tilePosition.y += 2 * delta;
+        const speed = 5;
+        if (this.keys["ArrowUp"] || this.keys["KeyW"]) {
+            this.fighter.y -= speed * delta;
+        }
+        if (this.keys["ArrowDown"] || this.keys["KeyS"]) {
+            this.fighter.y += speed * delta;
+        }
+        if (this.keys["ArrowLeft"] || this.keys["KeyA"]) {
+            this.fighter.x -= speed * delta;
+        }
+        if (this.keys["ArrowRight"] || this.keys["KeyD"]) {
+            this.fighter.x += speed * delta;
+        }
+
+        if (this.fighter.x < this.fighter.width / 2) {
+            this.fighter.x = this.fighter.width / 2;
+        }
+
+        if (this.fighter.x > this.app.screen.width - this.fighter.width / 2) {
+            this.fighter.x = this.app.screen.width - this.fighter.width / 2;
+        }
     }
 
     createFighter(sheet) {
         const textures = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0;i < 30;i++) {
             const val = i < 10 ? `000${i}` : `00${i}`;
             const frameName = `rollSequence${val}.png`;
             console.log(frameName);
